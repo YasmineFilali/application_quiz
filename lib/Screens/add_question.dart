@@ -71,55 +71,55 @@ class _AddQuestionState extends State<AddQuestion> {
             children: [
               TextFormField(
                 decoration: InputDecoration(
-                    hintText: "QuestionText"
+                    hintText: "Question"
                 ),
                 onChanged: (val){
                   question = val;
                 },
                 validator: (val){
                   if (val != null && val.isEmpty) {
-                    return"Enter question";
+                    return"saisissez la question";
                   }                },
               ),
               SizedBox(height: 6,),
               TextFormField(
                 decoration: InputDecoration(
-                    hintText: "Option one"
+                    hintText: "première réponse"
                 ),
                 onChanged: (val){
                   option1 = val;
                 },
                 validator: (val){
                   if (val != null && val.isEmpty) {
-                    return "Enter option one";
+                    return "saisissez la première réponse";
                   }
                 },
               ),
               SizedBox(height: 6,),
               TextFormField(
                 decoration: InputDecoration(
-                    hintText: "Option two"
+                    hintText: "Deuxième réponse"
                 ),
                 onChanged: (val){
                   option2 = val;
                 },
                 validator: (val){
                   if (val != null && val.isEmpty) {
-                    return "Enter option two";
+                    return "Saisissez la 2eme réponse";
                   }
                 },
               ),
               SizedBox(height: 6,),
               TextFormField(
                 decoration: InputDecoration(
-                    hintText: "Option three"
+                    hintText: "troisième réponse"
                 ),
                 onChanged: (val){
                   option3 = val;
                 },
                 validator: (val){
                   if (val != null && val.isEmpty) {
-                    return "Enter option three";
+                    return "Saisissez la 3eme réponse";
                   }
                 },
               ),
@@ -133,7 +133,7 @@ class _AddQuestionState extends State<AddQuestion> {
                 },
                 validator: (val){
                   if (val != null && val.isEmpty) {
-                    return "Enter correct answer";
+                    return "Saisissez la réponse correcte";
                   }
 
                 },
