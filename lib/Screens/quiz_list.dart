@@ -23,7 +23,7 @@ class _QuizListState extends State<QuizList> {
         builder: (context, snapshot){
           return snapshot == null ?
           Container(
-            child: Center(child: Text("No Quiz Available", style: TextStyle(fontSize: 18, color: Colors.red),)),
+            child: Center(child: Text("Aucun quiz disponible", style: TextStyle(fontSize: 18, color: Colors.red),)),
           ) :
           ListView.builder(
               itemCount: snapshot.data.docs.length,
