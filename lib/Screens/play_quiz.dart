@@ -109,7 +109,7 @@ class _PlayQuizState extends State<PlayQuiz> {
                 height: 10,
               ),
               querySnapshot.docs == null ? Container(
-                child: Center(child: Text("No Question Available", style: TextStyle(fontSize: 18, color: Colors.red)),),
+                child: Center(child: Text("Aucune question disponible", style: TextStyle(fontSize: 18, color: Colors.red)),),
               ) :
               ListView.builder(
                   padding: EdgeInsets.symmetric(horizontal: 24),
