@@ -28,7 +28,6 @@ class _ResultsState extends State<Results> {
           ),
           ChangeThemeButtonWidget(),
         ],
-        backgroundColor: Colors.blueGrey,
 
       ),
       body: Container(

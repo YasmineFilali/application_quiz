@@ -105,7 +105,6 @@ class _EditQuizState extends State<EditQuiz> {
           ChangeThemeButtonWidget(),
         ],
         iconTheme: IconThemeData(color: Colors.white),
-        backgroundColor: Colors.blueGrey,
 
       ),
       body: _isLoading? Container(

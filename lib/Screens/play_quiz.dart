@@ -94,7 +94,6 @@ class _PlayQuizState extends State<PlayQuiz> {
           ),
           ChangeThemeButtonWidget(),
         ],
-        backgroundColor: Colors.blueGrey,
 
       ),
       body: _isLoading? Container(
