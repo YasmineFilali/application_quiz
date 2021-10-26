@@ -90,7 +90,7 @@ class _PlayQuizState extends State<PlayQuiz> {
               onPressed: (){
                 Navigator.push(context, MaterialPageRoute(builder: (context) => QuizList()));
               },
-              icon: Icon(Icons.list_alt_sharp, color: Colors.black87,)
+              icon: Icon(Icons.list_alt_sharp, color: Colors.white,)
           ),
           ChangeThemeButtonWidget(),
         ],

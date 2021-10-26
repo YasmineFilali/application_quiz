@@ -79,7 +79,6 @@ class _HomeState extends State<Home> {
           ),
           ChangeThemeButtonWidget(),
         ],
-        backgroundColor: Colors.blueGrey,
 
       ),
       body: _isLoading
