@@ -1,3 +1,5 @@
+import 'package:application_quiz/Screens/quiz_list.dart';
+import 'package:application_quiz/widgets/ChangeThemeButtonWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:application_quiz/Screens/home.dart';
 import 'package:application_quiz/widgets/widgets.dart';
@@ -15,13 +17,27 @@ class _ResultsState extends State<Results> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: appBar(context),
+        actions: <Widget>[
+          IconButton(
+              onPressed: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context) => QuizList()));
+              },
+              icon: Icon(Icons.list_alt_sharp, color: Colors.white,)
+          ),
+          ChangeThemeButtonWidget(),
+        ],
+        backgroundColor: Colors.blueGrey,
+
+      ),
       body: Container(
         height: MediaQuery.of(context).size.height,
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("Réponses correctes / Total : ${widget.correct}/${widget.total}", style: TextStyle(fontSize: 25),),
+              Text("Score : ${widget.correct}/${widget.total}", style: TextStyle(fontSize: 25),),
               SizedBox(height: 8,),
               Text("Bonne réponse : ${widget.correct}", style: TextStyle(fontSize: 16, color: Colors.green), textAlign: TextAlign.center,),
               SizedBox(height: 8,),
@@ -32,7 +48,7 @@ class _ResultsState extends State<Results> {
                   onTap: (){
                     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Home()));
                   },
-                  child: orangeButton(context, "Retour a l’accueil ", MediaQuery.of(context).size.width/2, Colors.blueAccent)
+                  child: Button2(context, "Retourner a la page d'accueil", MediaQuery.of(context).size.width/1.5, Colors.blueAccent)
               ),
             ],
           ),

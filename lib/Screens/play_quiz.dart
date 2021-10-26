@@ -1,3 +1,5 @@
+import 'package:application_quiz/Screens/quiz_list.dart';
+import 'package:application_quiz/widgets/ChangeThemeButtonWidget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:application_quiz/models/question_model.dart';
@@ -10,6 +12,7 @@ class PlayQuiz extends StatefulWidget {
 
   final String quizId;
   PlayQuiz(this.quizId);
+
 
   @override
   _PlayQuizState createState() => _PlayQuizState();
@@ -25,21 +28,21 @@ late Stream infoStream;
 class _PlayQuizState extends State<PlayQuiz> {
 
   DatabaseService _databaseService = new DatabaseService();
+
   late QuerySnapshot querySnapshot;
 
-  bool _isLoading = true;
 
+  bool _isLoading = true;
   QuestionModel getQuestionModelFromSnapshot(DocumentSnapshot questionSnapshot){
 
     QuestionModel questionModel = new QuestionModel();
-    questionModel.questionText = questionSnapshot.data()["question"];
-
+    questionModel.questionText = questionSnapshot.data()["questionText"];
+    questionModel.questionImageUrl = questionSnapshot.data()["questionImageUrl"];
     List<String> options =
     [
       questionSnapshot.data()["option1"],
       questionSnapshot.data()["option2"],
       questionSnapshot.data()["option3"],
-      questionSnapshot.data()["option4"],
     ];
     options.shuffle();
 
@@ -56,32 +59,24 @@ class _PlayQuizState extends State<PlayQuiz> {
 
   @override
   void initState() {
+    String quizId=widget.quizId;
     _databaseService.getQuestionData(widget.quizId).then((value){
       querySnapshot = value;
       _notAttempted = 0;
       _correct = 0;
       _incorrect = 0;
       total = querySnapshot.docs.length;
+      print("total $total");
       _isLoading = false;
-      setState(() {
-
-      });
+      setState(() {});
     });
 
-    if(infoStream == null){
-      infoStream = Stream<List<int>>.periodic(
-          Duration(milliseconds: 100), (x){
-
-        return [_correct, _incorrect] ;
-      });
-    }
-    // TODO: implement initState
     super.initState();
+    print("init don $total ${widget.quizId} ");
   }
 
   @override
   void dispose() {
-    //infoStream = null;
     super.dispose();
   }
 
@@ -90,26 +85,31 @@ class _PlayQuizState extends State<PlayQuiz> {
     return Scaffold(
       appBar: AppBar(
         title: appBar(context),
-        centerTitle: true,
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
-        brightness: Brightness.light,
+        actions: <Widget>[
+          IconButton(
+              onPressed: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context) => QuizList()));
+              },
+              icon: Icon(Icons.list_alt_sharp, color: Colors.black87,)
+          ),
+          ChangeThemeButtonWidget(),
+        ],
+        backgroundColor: Colors.blueGrey,
+
       ),
       body: _isLoading? Container(
         child: Center(child: CircularProgressIndicator()),
       ) :
       SingleChildScrollView(
         child: Container(
+          margin: const EdgeInsets.only(left: 10.0, right: 10.0, top: 34.0),
+
           child: Column(
             children: [
-              InfoHeader(
-                length: querySnapshot.docs.length,
-              ),
-              SizedBox(
-                height: 10,
-              ),
               querySnapshot.docs == null ? Container(
-                child: Center(child: Text("Aucune question disponible", style: TextStyle(fontSize: 18, color: Colors.red)),),
+                child: Center(
+                  child: Text("Aucune question disponible",
+                      style: TextStyle(fontSize: 18, color: Colors.red)),),
               ) :
               ListView.builder(
                   padding: EdgeInsets.symmetric(horizontal: 24),
@@ -129,7 +129,7 @@ class _PlayQuizState extends State<PlayQuiz> {
       ),
 
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.done_outline_sharp),
+        child: Icon(Icons.next_plan),
         onPressed: (){
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Results(
               correct: _correct,
@@ -141,54 +141,6 @@ class _PlayQuizState extends State<PlayQuiz> {
     );
   }
 }
-
-class InfoHeader extends StatefulWidget {
-
-  final int length;
-
-  InfoHeader({required this.length});
-
-  @override
-  _InfoHeaderState createState() => _InfoHeaderState();
-}
-
-class _InfoHeaderState extends State<InfoHeader> {
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder(
-        stream: infoStream,
-        builder: (context, snapshot){
-          return snapshot.hasData ? Container(
-            height: 40,
-            margin: EdgeInsets.only(left: 14),
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              shrinkWrap: true,
-              children: <Widget>[
-               NumberOfQuestionTile(
-                  text: "Total",
-                  number: widget.length,
-                ),
-                NumberOfQuestionTile(
-                  text: "Correct",
-                  number: _correct,
-                ),
-                NumberOfQuestionTile(
-                  text: "Incorrect",
-                  number: _incorrect,
-                ),
-                NumberOfQuestionTile(
-                  text: "NotAttempted",
-                  number: _notAttempted,
-                ),
-              ],
-            ),
-          ) : Container();
-        }
-    );
-  }
-}
-
 
 class QuizPlayTile extends StatefulWidget {
 
@@ -210,7 +162,8 @@ class _QuizPlayTileState extends State<QuizPlayTile> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Q${widget.index+1} ${widget.questionModel.questionText}", style: TextStyle(fontSize: 18, color: Colors.black87),),
+          Image.network(widget.questionModel.questionImageUrl),
+          Text (" ${widget.questionModel.questionText}", style: TextStyle(fontSize: 18, color: Colors.black87),),
           SizedBox(height: 12,),
           GestureDetector(
             onTap: (){

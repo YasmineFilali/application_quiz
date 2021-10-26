@@ -1,6 +1,8 @@
+import 'package:application_quiz/provider/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:application_quiz/Screens/home.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,17 +24,22 @@ class _MyAppState extends State<MyApp> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
+  Widget build(BuildContext context) => ChangeNotifierProvider(
+    create: (context) => ThemeProvider(),
+    builder: (context, _) {
+      final themeProvider = Provider.of<ThemeProvider>(context);
+      return MaterialApp(
+        title: 'Flutter Demo',
+        debugShowCheckedModeBanner: false,
+        themeMode: themeProvider.themeMode,
+        theme: MyThemes.lightTheme,
+        darkTheme: MyThemes.darkTheme,
 
-        primarySwatch: Colors.blue,
+        //primarySwatch: Colors.blue,
+        //AppTheme.lightTheme,
 
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home:  Home(),
-    );
-  }
+        home:  Home(),
+      );
+    },
+  );
 }

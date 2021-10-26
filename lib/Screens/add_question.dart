@@ -1,3 +1,5 @@
+import 'package:application_quiz/Screens/quiz_list.dart';
+import 'package:application_quiz/widgets/ChangeThemeButtonWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:application_quiz/Service/database.dart';
 import 'package:application_quiz/widgets/widgets.dart';
@@ -15,15 +17,14 @@ class AddQuestion extends StatefulWidget {
 class _AddQuestionState extends State<AddQuestion> {
 
   final _formKey = GlobalKey<FormState>();
-  late String question, option1, option2, option3, correctAnswer, questionId;
+  late String questionText, questionImageUrl, option1, option2, option3, correctAnswer, questionId;
 
   bool _isLoading = false;
 
   DatabaseService _databaseService = new DatabaseService();
 
-  _uploadQuestionData() async{
-    if(_formKey.currentState!.validate()){
-
+  _uploadQuestionData() async {
+    if (_formKey.currentState!.validate()) {
       setState(() {
         _isLoading = true;
       });
@@ -32,12 +33,13 @@ class _AddQuestionState extends State<AddQuestion> {
 
       Map<String, String> questionData =
       {
-        "questionText" : question,
-        "option1" : option1,
-        "option2" : option2,
-        "option3" : option3,
-        "correctAnswer" : correctAnswer,
-        "questionId" : questionId
+        "questionText": questionText,
+        "questionImageUrl": questionImageUrl,
+        "option1": option1,
+        "option2": option2,
+        "option3": option3,
+        "correctAnswer": correctAnswer,
+        "questionId": questionId
       };
 
       await _databaseService.addQuestionData(questionData, widget.quizId, questionId).then((value) => {
@@ -54,10 +56,15 @@ class _AddQuestionState extends State<AddQuestion> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: appBar(context),
-        iconTheme: IconThemeData(color: Colors.black87),
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
-        brightness: Brightness.light,
+        actions: <Widget>[
+          IconButton(
+              onPressed: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context) => QuizList()));
+              },
+              icon: Icon(Icons.list_alt_sharp, color: Colors.white,)
+          ),
+          ChangeThemeButtonWidget(),
+        ],
       ),
       body: _isLoading ? Container(
         child: Center(
@@ -73,69 +80,83 @@ class _AddQuestionState extends State<AddQuestion> {
                 decoration: InputDecoration(
                     hintText: "Question"
                 ),
-                onChanged: (val){
-                  question = val;
+                onChanged: (val) {
+                  questionText = val;
                 },
-                validator: (val){
+                validator: (val) {
                   if (val != null && val.isEmpty) {
-                    return"saisissez la question";
-                  }                },
+                    return "Saisissez la question";
+                  }
+                },
               ),
               SizedBox(height: 6,),
               TextFormField(
                 decoration: InputDecoration(
-                    hintText: "première réponse"
+                    hintText: "Image Url"
                 ),
-                onChanged: (val){
+                onChanged: (val) {
+                  questionImageUrl = val;
+                },
+                validator: (val) {
+                  if (val != null && val.isEmpty) {
+                    return "Saisissez l'url d'une image";
+                  }
+                },
+              ),
+              SizedBox(height: 6,),
+              TextFormField(
+                decoration: InputDecoration(
+                    hintText: "Première option "
+                ),
+                onChanged: (val) {
                   option1 = val;
                 },
-                validator: (val){
+                validator: (val) {
                   if (val != null && val.isEmpty) {
-                    return "saisissez la première réponse";
+                    return "Saisissez la 1ere options";
                   }
                 },
               ),
               SizedBox(height: 6,),
               TextFormField(
                 decoration: InputDecoration(
-                    hintText: "Deuxième réponse"
+                    hintText: "Deuxième option"
                 ),
-                onChanged: (val){
+                onChanged: (val) {
                   option2 = val;
                 },
-                validator: (val){
+                validator: (val) {
                   if (val != null && val.isEmpty) {
-                    return "Saisissez la 2eme réponse";
+                    return "Saisissez la 2eme options";
                   }
                 },
               ),
               SizedBox(height: 6,),
               TextFormField(
                 decoration: InputDecoration(
-                    hintText: "troisième réponse"
+                    hintText: "troisième option"
                 ),
-                onChanged: (val){
+                onChanged: (val) {
                   option3 = val;
                 },
-                validator: (val){
+                validator: (val) {
                   if (val != null && val.isEmpty) {
-                    return "Saisissez la 3eme réponse";
+                    return "Saisissez la 3eme options";
                   }
                 },
               ),
               SizedBox(height: 6,),
               TextFormField(
                 decoration: InputDecoration(
-                    hintText: "Correct answer"
+                    hintText: "Réponse correcte"
                 ),
-                onChanged: (val){
+                onChanged: (val) {
                   correctAnswer = val;
                 },
-                validator: (val){
+                validator: (val) {
                   if (val != null && val.isEmpty) {
-                    return "Saisissez la réponse correcte";
+                    return "Saisissez la reponse correcte";
                   }
-
                 },
               ),
               Spacer(),
@@ -143,21 +164,28 @@ class _AddQuestionState extends State<AddQuestion> {
               Row(
                   children: [
                     GestureDetector(
-                        onTap: (){
+                        onTap: () {
                           Navigator.pop(context);
                         },
-                        child: orangeButton(context, "Submit", MediaQuery.of(context).size.width/2 - 36, Colors.deepOrangeAccent)
+                        child: Button1(context, "Enregistrer", MediaQuery
+                            .of(context)
+                            .size
+                            .width / 2 - 36, Colors.deepOrangeAccent)
                     ),
                     SizedBox(width: 24,),
                     GestureDetector(
-                        onTap: (){
+                        onTap: () {
                           _uploadQuestionData();
                         },
-                        child: orangeButton(context, "Add Question", MediaQuery.of(context).size.width/2 - 36, Colors.blueAccent)
+                        child: Button1(
+                            context, "Ajouter une Question", MediaQuery
+                            .of(context)
+                            .size
+                            .width / 2 - 36, Colors.blueAccent)
                     ),
                   ]
               ),
-              SizedBox(height: 40.0)
+              SizedBox(height: 50.0)
             ],
           ),
         ),

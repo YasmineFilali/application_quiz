@@ -1,6 +1,7 @@
 class QuestionModel{
   late String questionId;
   late String questionText;
+  late String questionImageUrl;
   late String option1;
   late String option2;
   late String option3;
